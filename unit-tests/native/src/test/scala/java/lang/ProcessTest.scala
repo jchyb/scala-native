@@ -11,6 +11,7 @@ import scala.io.Source
 
 import org.junit.Test
 import org.junit.Assert._
+import java.util.Random
 
 class ProcessTest {
   import javalib.lang.ProcessUtils._
@@ -131,9 +132,10 @@ class ProcessTest {
   }
 
   @Test def outputStreamReadsFromFile(): Unit = {
+    val rand : Random = new Random();
     val pb = new ProcessBuilder("echo.sh")
     pb.environment.put("PATH", resourceDir)
-    val file = File.createTempFile("istest", ".tmp", new File("/tmp"))
+    val file = File.createTempFile("istest" + rand.nextInt(), ".tmp", new File("/tmp"))
     pb.redirectInput(file)
 
     try {
@@ -141,6 +143,7 @@ class ProcessTest {
       val os = new FileOutputStream(file)
       os.write("hello\n".getBytes)
       os.write("quit\n".getBytes)
+      os.close()
 
       assertProcessExitOrTimeout(proc)
 
