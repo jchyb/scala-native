@@ -97,7 +97,7 @@ object FileOutputStream {
       } else {
         import scala.scalanative.posix.sys.stat._
         import scala.scalanative.posix.fcntl._
-        val flags = O_CREAT | O_WRONLY | (if (append) O_APPEND else O_TRUNC)
+        val flags = O_CREAT | O_WRONLY | O_SYNC | (if (append) O_APPEND else O_TRUNC)
         val mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH
         val fd = open(toCString(file.getPath()), flags, mode)
         if (fd == -1)
