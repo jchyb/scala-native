@@ -82,15 +82,14 @@ class ProcessTest {
   @Test def outputStreamReadsFromFile(): Unit = {
     val pb = new ProcessBuilder(resourceDir + "/echo.sh")
     pb.environment.put("PATH", resourceDir)
-    val file = File.createTempFile("ist" + random.nextInt() % 1000, ".tmp", new File("/tmp"))
+    val file = File.createTempFile("ist", ".tmp", new File("/tmp"))
     pb.redirectInput(file)
 
     try {
-      val proc = pb.start()
       val os = new FileOutputStream(file)
       os.write("hello\n".getBytes)
       os.write("quit\n".getBytes)
-      os.flush()
+      val proc = pb.start()
 
       assertProcessExitOrTimeout(proc)
 
