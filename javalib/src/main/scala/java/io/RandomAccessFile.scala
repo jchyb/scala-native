@@ -6,7 +6,7 @@ import scalanative.unsafe.{toCString, Zone}
 import scalanative.libc.stdio
 import scalanative.posix.{fcntl, unistd}
 import scalanative.posix.sys.stat
-
+import java.nio.channels.{FileChannelImpl, FileChannel}
 class RandomAccessFile private (
     file: File,
     fd: FileDescriptor,
@@ -27,13 +27,15 @@ class RandomAccessFile private (
   private var closed: Boolean = false
   private lazy val in = new DataInputStream(new FileInputStream(fd))
   private lazy val out = new DataOutputStream(new FileOutputStream(fd))
+  private lazy val channel =
+    new FileChannelImpl(fd, Some(file), deleteOnClose = false)
 
   override def close(): Unit = {
     closed = true
     unistd.close(fd.fd)
   }
 
-  // final def getChannel(): FileChannel
+  final def getChannel(): FileChannel = channel
 
   def getFD(): FileDescriptor =
     fd
