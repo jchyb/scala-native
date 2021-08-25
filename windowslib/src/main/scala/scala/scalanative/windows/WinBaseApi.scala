@@ -37,6 +37,15 @@ object WinBaseApi {
   def GetCurrentDirectoryW(bufferLength: DWord, buffer: CWString): DWord =
     extern
 
+  def CreateFileMappingA(
+      hFile: Handle,
+      lpFileMappingAttributes: SecurityAttributes,
+      flProtect: DWord,
+      dwMaximumSizeHigh: DWord,
+      dwMaximumSizeLow: DWord,
+      lpName: Ptr[Byte]
+  ): Handle = extern
+
   @name("scalanative_win32_default_language")
   final def DefaultLanguageId: DWord = extern
 }
@@ -67,5 +76,9 @@ object WinBaseApiExt {
   final val FORMAT_MESSAGE_FROM_HMODULE: DWord = 0x00000800.toUInt
   final val FORMAT_MESSAGE_FROM_SYSTEM: DWord = 0x00001000.toUInt
   final val FORMAT_MESSAGE_ARGUMENT_ARRAY: DWord = 0x00002000.toUInt
+
+  final val PAGE_READONLY: DWord = 0x02.toUInt
+  final val PAGE_READWRITE: DWord = 0x04.toUInt
+  final val PAGE_WRITECOPY: DWord = 0x08.toUInt
 
 }
