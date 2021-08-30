@@ -101,9 +101,20 @@ trait Opt { self: Interflow =>
 
     val retty = rets match {
       case Seq()   => Type.Nothing
-      case Seq(ty) => ty
+      case Seq(ty) => Sub.lub(ty, origRetTy, Some(origRetTy))
       case tys     => Sub.lub(tys, Some(origRetTy))
     }
+    // if(name.show.contains("reverse")){
+    //   println("__opt-call__")
+    //   println(name)
+    //   println(orig)
+    //   println(origtys)
+    //   println(argtys)
+    //   println(args)
+    //   println(origRetTy)
+    //   //println(origdefn.insts.toArray.map(a => println("elem " + a)))
+    //   println(retty)
+    // }
 
     result(retty, insts)
   }

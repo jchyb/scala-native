@@ -113,9 +113,11 @@ object Sub {
     if (linfo == rinfo) {
       linfo
     } else if (linfo.is(rinfo)) {
-      rinfo
+      if(boundInfo.forall(_.is(rinfo))) boundInfo.get
+      else rinfo
     } else if (rinfo.is(linfo)) {
-      linfo
+      if(boundInfo.forall(_.is(linfo))) boundInfo.get
+      else linfo
     } else {
       val candidates =
         linfo.linearized.filter { i => rinfo.is(i) && boundInfo.forall(i.is) }
