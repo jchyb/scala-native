@@ -93,7 +93,7 @@ final class MergeProcessor(
                 s.materialize(v)
             }
             val name = mergeFresh()
-            val paramty = Sub.lub(materialized.map(_.ty), bound)
+            val paramty = Sub.lub(materialized.map(_.ty), None)
             val param = Val.Local(name, paramty)
             mergePhis += MergePhi(param, names.zip(materialized))
             param
