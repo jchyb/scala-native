@@ -68,6 +68,11 @@ object Sub {
     tys match {
       case Seq() =>
         unreachable
+      case Seq(ty) =>
+        bound match {
+          case Some(boundTy) => bounded(ty, boundTy) 
+          case None => ty
+        }
       case head +: tail =>
         tail.foldLeft[Type](head)(lub(_, _, bound))
     }
@@ -78,19 +83,21 @@ object Sub {
   ): Type = {
     (lty, rty) match {
       case _ if lty == rty =>
-        lty
+        bounded(lty, bound)
       case (ty, Type.Nothing) =>
-        ty
+        bounded(ty, bound)
       case (Type.Nothing, ty) =>
-        ty
+        bounded(ty, bound)
       case (Type.Ptr, Type.Null) =>
         Type.Ptr
       case (Type.Null, Type.Ptr) =>
         Type.Ptr
       case (refty: Type.RefKind, Type.Null) =>
-        Type.Ref(refty.className, refty.isExact, nullable = true)
+        val ScopeRef(info) = refty
+        Type.Ref(bounded(info, bound.flatMap(ScopeRef.unapply)).name, refty.isExact, nullable = true)
       case (Type.Null, refty: Type.RefKind) =>
-        Type.Ref(refty.className, refty.isExact, nullable = true)
+        val ScopeRef(info) = refty
+        Type.Ref(bounded(info, bound.flatMap(ScopeRef.unapply)).name, refty.isExact, nullable = true)
       case (lty: Type.RefKind, rty: Type.RefKind) =>
         val ScopeRef(linfo) = lty
         val ScopeRef(rinfo) = rty
@@ -111,18 +118,18 @@ object Sub {
       implicit linked: linker.Result
   ): ScopeInfo = {
     if (linfo == rinfo) {
-      linfo
+      bounded(linfo, boundInfo)
     } else if (linfo.is(rinfo)) {
-      rinfo
+      bounded(rinfo, boundInfo)
     } else if (rinfo.is(linfo)) {
-      linfo
+      bounded(linfo, boundInfo)
     } else {
       val candidates =
         linfo.linearized.filter { i => rinfo.is(i) && boundInfo.forall(i.is) }
 
       candidates match {
         case Seq() =>
-          linked.infos(Rt.Object.name).asInstanceOf[ScopeInfo]
+          bounded(linked.infos(Rt.Object.name).asInstanceOf[ScopeInfo], boundInfo)
         case Seq(cand) =>
           cand
         case _ =>
@@ -142,4 +149,20 @@ object Sub {
       }
     }
   }
+
+  private def bounded(mainInfo: ScopeInfo, boundInfo: Option[ScopeInfo]): ScopeInfo =
+    if (boundInfo.map(_.is(mainInfo)).getOrElse(false)) boundInfo.get
+    else mainInfo
+
+  def bounded(mainType: Type, bound: Type)(implicit
+      linked: linker.Result
+  ): Type = 
+    if(is(bound, mainType)) bound
+    else mainType
+
+  def bounded(mainType: Type, boundType: Option[Type])(implicit
+      linked: linker.Result
+  ): Type =
+    if (boundType.map(Sub.is(mainType, _)).getOrElse(false)) boundType.get
+    else mainType
 }

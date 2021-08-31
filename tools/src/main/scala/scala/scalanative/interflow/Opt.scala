@@ -85,6 +85,11 @@ trait Opt { self: Interflow =>
     // Collect instructions, materialize all returned values
     // and compute the result type.
     val insts = blocks.flatMap { block =>
+      // if(name.show.contains("reverse") && name.show.contains("List")){
+      //   println("_block_")
+      //   println(block.cf)
+      //   println(block.toInsts())
+      // }
       block.cf = block.cf match {
         case inst @ Inst.Ret(retv) =>
           Inst.Ret(block.end.materialize(retv))(inst.pos)
@@ -101,9 +106,21 @@ trait Opt { self: Interflow =>
 
     val retty = rets match {
       case Seq()   => Type.Nothing
-      case Seq(ty) => ty
+      case Seq(ty) => Sub.bounded(ty, origRetTy)
       case tys     => Sub.lub(tys, Some(origRetTy))
     }
+
+    // if(name.show.contains("reverse") && name.show.contains("List")){
+    //   println("__opt__")
+    //   println(name)
+    //   println(orig)
+    //   println(origtys)
+    //   println(argtys)
+    //   println(args)
+    //   println(origRetTy)
+    //   println(origdefn.insts.toArray)
+    //   println(retty)
+    // }
 
     result(retty, insts)
   }

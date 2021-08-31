@@ -432,7 +432,7 @@ final class MergeProcessor(
       // to the source instructions, not relative to generated ones.
       val syntheticFresh = Fresh(insts.toSeq)
       val syntheticParam =
-        Val.Local(syntheticFresh(), Sub.lub(tys, Some(retTy)))
+        Val.Local(syntheticFresh(), Sub.lub(tys, None))
       val syntheticLabel =
         Inst.Label(syntheticFresh(), Seq(syntheticParam))
       val resultMergeBlock =

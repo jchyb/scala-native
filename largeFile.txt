@@ -1,0 +1,188 @@
+didopt def @"M34scala.scalanative.nio.fs.UnixPath$D10normalizedL33scala.scalanative.nio.fs.UnixPathL16java.lang.StringEO" : (@"T34scala.scalanative.nio.fs.UnixPath$", @"T33scala.scalanative.nio.fs.UnixPath") => @"T16java.lang.String" {
+%30000(%1 : @"T34scala.scalanative.nio.fs.UnixPath$", %2 : @"T33scala.scalanative.nio.fs.UnixPath"):
+  %40001 = fieldload[int] %2 : @"T33scala.scalanative.nio.fs.UnixPath", @"M33scala.scalanative.nio.fs.UnixPathF8bitmap$0O"
+  %40004 = and[int] %40001 : int, int 1
+  %40005 = ieq[int] %40004 : int, int 0
+  if %40005 : bool then %50000 else %60000
+%50000:
+  %50001 = call[(@"T33scala.scalanative.nio.fs.UnixPath") => @"T16java.lang.String"] @"M33scala.scalanative.nio.fs.UnixPathD50scala$scalanative$nio$fs$UnixPath$$path$lzycomputeL16java.lang.StringEPT33scala.scalanative.nio.fs.UnixPath" : ptr(%2 : @"T33scala.scalanative.nio.fs.UnixPath")
+  jump %70000(%50001 : @"T16java.lang.String")
+%60000:
+  %60001 = fieldload[@"T16java.lang.String"] %2 : @"T33scala.scalanative.nio.fs.UnixPath", @"M33scala.scalanative.nio.fs.UnixPathF39scala$scalanative$nio$fs$UnixPath$$pathO"
+  jump %70000(%60001 : @"T16java.lang.String")
+%70000(%70001 : @"T16java.lang.String"):
+  %80001 = fieldload[int] %70001 : @"T16java.lang.String", @"M16java.lang.StringF5countO"
+  %30002 = slt[int] %80001 : int, int 2
+  if %30002 : bool then %90000 else %100000
+%90000:
+  %110001 = fieldload[int] %2 : @"T33scala.scalanative.nio.fs.UnixPath", @"M33scala.scalanative.nio.fs.UnixPathF8bitmap$0O"
+  %110004 = and[int] %110001 : int, int 1
+  %110005 = ieq[int] %110004 : int, int 0
+  if %110005 : bool then %120000 else %130000
+%120000:
+  %120001 = call[(@"T33scala.scalanative.nio.fs.UnixPath") => @"T16java.lang.String"] @"M33scala.scalanative.nio.fs.UnixPathD50scala$scalanative$nio$fs$UnixPath$$path$lzycomputeL16java.lang.StringEPT33scala.scalanative.nio.fs.UnixPath" : ptr(%2 : @"T33scala.scalanative.nio.fs.UnixPath")
+  jump %140000(%120001 : @"T16java.lang.String")
+%130000:
+  %130001 = fieldload[@"T16java.lang.String"] %2 : @"T33scala.scalanative.nio.fs.UnixPath", @"M33scala.scalanative.nio.fs.UnixPathF39scala$scalanative$nio$fs$UnixPath$$pathO"
+  jump %140000(%130001 : @"T16java.lang.String")
+%140000(%140001 : @"T16java.lang.String"):
+  ret %140001 : @"T16java.lang.String"
+%100000:
+  jump %150000
+%150000:
+  %160001 = fieldload[int] %2 : @"T33scala.scalanative.nio.fs.UnixPath", @"M33scala.scalanative.nio.fs.UnixPathF8bitmap$0O"
+  %160004 = and[int] %160001 : int, int 1
+  %160005 = ieq[int] %160004 : int, int 0
+  if %160005 : bool then %170000 else %180000
+%170000:
+  %170001 = call[(@"T33scala.scalanative.nio.fs.UnixPath") => @"T16java.lang.String"] @"M33scala.scalanative.nio.fs.UnixPathD50scala$scalanative$nio$fs$UnixPath$$path$lzycomputeL16java.lang.StringEPT33scala.scalanative.nio.fs.UnixPath" : ptr(%2 : @"T33scala.scalanative.nio.fs.UnixPath")
+  jump %190000(%170001 : @"T16java.lang.String")
+%180000:
+  %180001 = fieldload[@"T16java.lang.String"] %2 : @"T33scala.scalanative.nio.fs.UnixPath", @"M33scala.scalanative.nio.fs.UnixPathF39scala$scalanative$nio$fs$UnixPath$$pathO"
+  jump %190000(%180001 : @"T16java.lang.String")
+%190000(%190001 : @"T16java.lang.String"):
+  %200001 = call[(@"T16java.lang.String", int, @"T16java.lang.String", int, int) => bool] @"M16java.lang.StringD13regionMatchesiL16java.lang.StringiizEO" : ptr(%190001 : @"T16java.lang.String", int 0, "/", int 0, int 1)
+  %220001 = fieldload[int] %2 : @"T33scala.scalanative.nio.fs.UnixPath", @"M33scala.scalanative.nio.fs.UnixPathF8bitmap$0O"
+  %220004 = and[int] %220001 : int, int 2
+  %220005 = ieq[int] %220004 : int, int 0
+  if %220005 : bool then %230000 else %240000
+%230000:
+  %230001 = call[(@"T33scala.scalanative.nio.fs.UnixPath") => array[int]] @"M33scala.scalanative.nio.fs.UnixPathD53scala$scalanative$nio$fs$UnixPath$$offsets$lzycomputeLAi_EPT33scala.scalanative.nio.fs.UnixPath" : ptr(%2 : @"T33scala.scalanative.nio.fs.UnixPath")
+  jump %250000(%230001 : array[int])
+%240000:
+  %240001 = fieldload[array[int]] %2 : @"T33scala.scalanative.nio.fs.UnixPath", @"M33scala.scalanative.nio.fs.UnixPathF42scala$scalanative$nio$fs$UnixPath$$offsetsO"
+  jump %250000(%240001 : array[int])
+%250000(%250001 : array[int]):
+  %270001 = arraylength %250001 : array[int]
+  %280002 = module @"T33scala.collection.immutable.Range$"
+  %280003 = isub[int] %270001 : int, int 1
+  %280004 = call[(@"T33scala.collection.immutable.Range$", int, int) => !?@"T32scala.collection.immutable.Range"] @"M33scala.collection.immutable.Range$D5applyiiL32scala.collection.immutable.RangeEO" : ptr(%280002 : !?@"T33scala.collection.immutable.Range$", int 0, %280003 : int)
+  %150007 = module @"T38scala.collection.immutable.IndexedSeq$"
+  %300001 = module @"T28scala.collection.IndexedSeq$"
+  %300002 = fieldload[@"T66scala.collection.generic.GenTraversableFactory$GenericCanBuildFrom"] %300001 : !?@"T28scala.collection.IndexedSeq$", @"M28scala.collection.IndexedSeq$F11ReusableCBFPT28scala.collection.IndexedSeq$"
+  %310001 = classalloc @"T44scala.scalanative.nio.fs.UnixPath$$anonfun$1"
+  %310002 = fieldstore[@"T33scala.scalanative.nio.fs.UnixPath"] %310001 : !?@"T44scala.scalanative.nio.fs.UnixPath$$anonfun$1", @"M44scala.scalanative.nio.fs.UnixPath$$anonfun$1F6path$1PT44scala.scalanative.nio.fs.UnixPath$$anonfun$1", %2 : @"T33scala.scalanative.nio.fs.UnixPath"
+  %310003 = call[(@"T32scala.collection.TraversableLike", @"T15scala.Function1", @"T37scala.collection.generic.CanBuildFrom") => @"T16java.lang.Object"] @"M38scala.collection.TraversableLike$classD3mapL32scala.collection.TraversableLikeL15scala.Function1L37scala.collection.generic.CanBuildFromL16java.lang.ObjectEO" : ptr(%280004 : !?@"T32scala.collection.immutable.Range", %310001 : !?@"T44scala.scalanative.nio.fs.UnixPath$$anonfun$1", %300002 : @"T66scala.collection.generic.GenTraversableFactory$GenericCanBuildFrom")
+  %150008 = as[@"T32scala.collection.TraversableOnce"] %310003 : @"T16java.lang.Object"
+  %150009 = module @"T32scala.collection.immutable.List$"
+  %150012 = method %150008 : @"T32scala.collection.TraversableOnce", "D8foldLeftL16java.lang.ObjectL15scala.Function2L16java.lang.ObjectEO"
+  %150013 = module @"T31scala.collection.immutable.Nil$"
+  %150014 = classalloc @"T44scala.scalanative.nio.fs.UnixPath$$anonfun$2"
+  %150015 = fieldstore[bool] %150014 : !?@"T44scala.scalanative.nio.fs.UnixPath$$anonfun$2", @"M44scala.scalanative.nio.fs.UnixPath$$anonfun$2F10absolute$1PT44scala.scalanative.nio.fs.UnixPath$$anonfun$2", %200001 : bool
+  %150016 = call[(@"T32scala.collection.TraversableOnce", @"T16java.lang.Object", @"T15scala.Function2") => @"T16java.lang.Object"] %150012 : ptr(%150008 : @"T32scala.collection.TraversableOnce", %150013 : !?@"T31scala.collection.immutable.Nil$", %150014 : !?@"T44scala.scalanative.nio.fs.UnixPath$$anonfun$2")
+  %150017 = as[@"T31scala.collection.immutable.List"] %150016 : @"T16java.lang.Object"
+  %150018 = call[(@"T31scala.collection.immutable.List") => ?@"T31scala.collection.immutable.List"] @"M31scala.collection.immutable.ListD7reverseL31scala.collection.immutable.ListEO" : ptr(%150017 : @"T31scala.collection.immutable.List")
+  if %200001 : bool then %340000 else %350000
+%340000:
+  %360001 = call[(@"T32scala.collection.TraversableOnce", @"T16java.lang.String", @"T16java.lang.String", @"T16java.lang.String") => !?@"T16java.lang.String"] @"M38scala.collection.TraversableOnce$classD8mkStringL32scala.collection.TraversableOnceL16java.lang.StringL16java.lang.StringL16java.lang.StringL16java.lang.StringEO" : ptr(%150018 : ?@"T31scala.collection.immutable.List", "/", "/", "")
+  jump %370000(%360001 : !?@"T16java.lang.String")
+%350000:
+  %380001 = call[(@"T32scala.collection.TraversableOnce", @"T16java.lang.String", @"T16java.lang.String", @"T16java.lang.String") => !?@"T16java.lang.String"] @"M38scala.collection.TraversableOnce$classD8mkStringL32scala.collection.TraversableOnceL16java.lang.StringL16java.lang.StringL16java.lang.StringL16java.lang.StringEO" : ptr(%150018 : ?@"T31scala.collection.immutable.List", "", "/", "")
+  jump %370000(%380001 : !?@"T16java.lang.String")
+%370000(%370001 : !?@"T16java.lang.String"):
+  ret %370001 : !?@"T16java.lang.String"
+}
+
+
+
+
+
+
+didopt def @"M34scala.scalanative.nio.fs.UnixPath$D10normalizedL33scala.scalanative.nio.fs.UnixPathL16java.lang.StringEO" : (@"T34scala.scalanative.nio.fs.UnixPath$", @"T33scala.scalanative.nio.fs.UnixPath") => @"T16java.lang.String" {
+%30000(%1 : @"T34scala.scalanative.nio.fs.UnixPath$", %2 : @"T33scala.scalanative.nio.fs.UnixPath"):
+  %40001 = fieldload[int] %2 : @"T33scala.scalanative.nio.fs.UnixPath", @"M33scala.scalanative.nio.fs.UnixPathF8bitmap$0O"
+  %40004 = and[int] %40001 : int, int 1
+  %40005 = ieq[int] %40004 : int, int 0
+  if %40005 : bool then %50000 else %60000
+%50000:
+  %50001 = call[(@"T33scala.scalanative.nio.fs.UnixPath") => @"T16java.lang.String"] @"M33scala.scalanative.nio.fs.UnixPathD50scala$scalanative$nio$fs$UnixPath$$path$lzycomputeL16java.lang.StringEPT33scala.scalanative.nio.fs.UnixPath" : ptr(%2 : @"T33scala.scalanative.nio.fs.UnixPath")
+  jump %70000(%50001 : @"T16java.lang.String")
+%60000:
+  %60001 = fieldload[@"T16java.lang.String"] %2 : @"T33scala.scalanative.nio.fs.UnixPath", @"M33scala.scalanative.nio.fs.UnixPathF39scala$scalanative$nio$fs$UnixPath$$pathO"
+  jump %70000(%60001 : @"T16java.lang.String")
+%70000(%70001 : @"T16java.lang.String"):
+  %80001 = fieldload[int] %70001 : @"T16java.lang.String", @"M16java.lang.StringF5countO"
+  %30002 = slt[int] %80001 : int, int 2
+  if %30002 : bool then %90000 else %100000
+%90000:
+  %110001 = fieldload[int] %2 : @"T33scala.scalanative.nio.fs.UnixPath", @"M33scala.scalanative.nio.fs.UnixPathF8bitmap$0O"
+  %110004 = and[int] %110001 : int, int 1
+  %110005 = ieq[int] %110004 : int, int 0
+  if %110005 : bool then %120000 else %130000
+%120000:
+  %120001 = call[(@"T33scala.scalanative.nio.fs.UnixPath") => @"T16java.lang.String"] @"M33scala.scalanative.nio.fs.UnixPathD50scala$scalanative$nio$fs$UnixPath$$path$lzycomputeL16java.lang.StringEPT33scala.scalanative.nio.fs.UnixPath" : ptr(%2 : @"T33scala.scalanative.nio.fs.UnixPath")
+  jump %140000(%120001 : @"T16java.lang.String")
+%130000:
+  %130001 = fieldload[@"T16java.lang.String"] %2 : @"T33scala.scalanative.nio.fs.UnixPath", @"M33scala.scalanative.nio.fs.UnixPathF39scala$scalanative$nio$fs$UnixPath$$pathO"
+  jump %140000(%130001 : @"T16java.lang.String")
+%140000(%140001 : @"T16java.lang.String"):
+  ret %140001 : @"T16java.lang.String"
+%100000:
+  jump %150000
+%150000:
+  %160001 = fieldload[int] %2 : @"T33scala.scalanative.nio.fs.UnixPath", @"M33scala.scalanative.nio.fs.UnixPathF8bitmap$0O"
+  %160004 = and[int] %160001 : int, int 1
+  %160005 = ieq[int] %160004 : int, int 0
+  if %160005 : bool then %170000 else %180000
+%170000:
+  %170001 = call[(@"T33scala.scalanative.nio.fs.UnixPath") => @"T16java.lang.String"] @"M33scala.scalanative.nio.fs.UnixPathD50scala$scalanative$nio$fs$UnixPath$$path$lzycomputeL16java.lang.StringEPT33scala.scalanative.nio.fs.UnixPath" : ptr(%2 : @"T33scala.scalanative.nio.fs.UnixPath")
+  jump %190000(%170001 : @"T16java.lang.String")
+%180000:
+  %180001 = fieldload[@"T16java.lang.String"] %2 : @"T33scala.scalanative.nio.fs.UnixPath", @"M33scala.scalanative.nio.fs.UnixPathF39scala$scalanative$nio$fs$UnixPath$$pathO"
+  jump %190000(%180001 : @"T16java.lang.String")
+%190000(%190001 : @"T16java.lang.String"):
+  %200001 = call[(@"T16java.lang.String", int, @"T16java.lang.String", int, int) => bool] @"M16java.lang.StringD13regionMatchesiL16java.lang.StringiizEO" : ptr(%190001 : @"T16java.lang.String", int 0, "/", int 0, int 1)
+  %220001 = fieldload[int] %2 : @"T33scala.scalanative.nio.fs.UnixPath", @"M33scala.scalanative.nio.fs.UnixPathF8bitmap$0O"
+  %220004 = and[int] %220001 : int, int 2
+  %220005 = ieq[int] %220004 : int, int 0
+  if %220005 : bool then %230000 else %240000
+%230000:
+  %230001 = call[(@"T33scala.scalanative.nio.fs.UnixPath") => array[int]] @"M33scala.scalanative.nio.fs.UnixPathD53scala$scalanative$nio$fs$UnixPath$$offsets$lzycomputeLAi_EPT33scala.scalanative.nio.fs.UnixPath" : ptr(%2 : @"T33scala.scalanative.nio.fs.UnixPath")
+  jump %250000(%230001 : array[int])
+%240000:
+  %240001 = fieldload[array[int]] %2 : @"T33scala.scalanative.nio.fs.UnixPath", @"M33scala.scalanative.nio.fs.UnixPathF42scala$scalanative$nio$fs$UnixPath$$offsetsO"
+  jump %250000(%240001 : array[int])
+%250000(%250001 : array[int]):
+  %270002 = module @"T27scala.runtime.ScalaRunTime$"
+  %270003 = call[(@"T27scala.runtime.ScalaRunTime$", @"T16java.lang.Object") => int] @"M27scala.runtime.ScalaRunTime$D12array_lengthL16java.lang.ObjectiEO" : ptr(%270002 : !?@"T27scala.runtime.ScalaRunTime$", %250001 : array[int])
+  %280002 = module @"T33scala.collection.immutable.Range$"
+  %280003 = isub[int] %270003 : int, int 1
+  %280004 = call[(@"T33scala.collection.immutable.Range$", int, int) => !?@"T42scala.collection.immutable.Range$Exclusive"] @"M33scala.collection.immutable.Range$D5applyiiL42scala.collection.immutable.Range$ExclusiveEO" : ptr(%280002 : !?@"T33scala.collection.immutable.Range$", int 0, %280003 : int)
+  %150008 = classalloc @"T44scala.scalanative.nio.fs.UnixPath$$$Lambda$1"
+  %150009 = fieldstore[@"T33scala.scalanative.nio.fs.UnixPath"] %150008 : !?@"T44scala.scalanative.nio.fs.UnixPath$$$Lambda$1", @"M44scala.scalanative.nio.fs.UnixPath$$$Lambda$1F8capture1O", %2 : @"T33scala.scalanative.nio.fs.UnixPath"
+  %150010 = fieldstore[@"T34scala.scalanative.nio.fs.UnixPath$"] %150008 : !?@"T44scala.scalanative.nio.fs.UnixPath$$$Lambda$1", @"M44scala.scalanative.nio.fs.UnixPath$$$Lambda$1F8capture0O", %1 : @"T34scala.scalanative.nio.fs.UnixPath$"
+  %150011 = call[(@"T32scala.collection.immutable.Range", @"T15scala.Function1") => @"T37scala.collection.immutable.IndexedSeq"] @"M32scala.collection.immutable.RangeD3mapL15scala.Function1L37scala.collection.immutable.IndexedSeqEO" : ptr(%280004 : !?@"T42scala.collection.immutable.Range$Exclusive", %150008 : !?@"T44scala.scalanative.nio.fs.UnixPath$$$Lambda$1")
+  %300001 = module @"T14scala.package$"
+  %300002 = fieldload[int] %300001 : !?@"T14scala.package$", @"M14scala.package$F8bitmap$0O"
+  %300005 = and[int] %300002 : int, int 64
+  %300006 = ieq[int] %300005 : int, int 0
+  if %300006 : bool then %310000 else %320000
+%310000:
+  %310001 = call[(@"T14scala.package$") => @"T32scala.collection.immutable.List$"] @"M14scala.package$D15List$lzycomputeL32scala.collection.immutable.List$EPT14scala.package$" : ptr(%300001 : !?@"T14scala.package$")
+  jump %330000(%310001 : @"T32scala.collection.immutable.List$")
+%320000:
+  %320001 = fieldload[@"T32scala.collection.immutable.List$"] %300001 : !?@"T14scala.package$", @"M14scala.package$F4ListO"
+  jump %330000(%320001 : @"T32scala.collection.immutable.List$")
+%330000(%330001 : @"T32scala.collection.immutable.List$"):
+  %340001 = module @"T31scala.collection.immutable.Nil$"
+  %150015 = method %150011 : @"T37scala.collection.immutable.IndexedSeq", "D8foldLeftL16java.lang.ObjectL15scala.Function2L16java.lang.ObjectEO"
+  %150016 = classalloc @"T44scala.scalanative.nio.fs.UnixPath$$$Lambda$2"
+  %150017 = fieldstore[bool] %150016 : !?@"T44scala.scalanative.nio.fs.UnixPath$$$Lambda$2", @"M44scala.scalanative.nio.fs.UnixPath$$$Lambda$2F8capture1O", %200001 : bool
+  %150018 = fieldstore[@"T34scala.scalanative.nio.fs.UnixPath$"] %150016 : !?@"T44scala.scalanative.nio.fs.UnixPath$$$Lambda$2", @"M44scala.scalanative.nio.fs.UnixPath$$$Lambda$2F8capture0O", %1 : @"T34scala.scalanative.nio.fs.UnixPath$"
+  %150019 = call[(@"T32scala.collection.IterableOnceOps", @"T16java.lang.Object", @"T15scala.Function2") => @"T16java.lang.Object"] %150015 : ptr(%150011 : @"T37scala.collection.immutable.IndexedSeq", %340001 : !?@"T31scala.collection.immutable.Nil$", %150016 : !?@"T44scala.scalanative.nio.fs.UnixPath$$$Lambda$2")
+  %150020 = as[@"T31scala.collection.immutable.List"] %150019 : @"T16java.lang.Object"
+  %150021 = call[(@"T31scala.collection.immutable.List") => ?@"T16java.lang.Object"] @"M31scala.collection.immutable.ListD7reverseL31scala.collection.immutable.ListEO" : ptr(%150020 : @"T31scala.collection.immutable.List")
+  if %200001 : bool then %360000 else %370000
+%360000:
+  %360008 = method %150021 : ?@"T16java.lang.Object", "D8mkStringL16java.lang.StringL16java.lang.StringL16java.lang.StringL16java.lang.StringEO"
+  %360010 = bitcast[@"T32scala.collection.IterableOnceOps"] %150021 : ?@"T16java.lang.Object"
+  %360011 = call[(@"T32scala.collection.IterableOnceOps", @"T16java.lang.String", @"T16java.lang.String", @"T16java.lang.String") => @"T16java.lang.String"] %360008 : ptr(%360010 : @"T32scala.collection.IterableOnceOps", "/", "/", "")
+  jump %380000(%360011 : @"T16java.lang.String")
+%370000:
+  %370008 = method %150021 : ?@"T16java.lang.Object", "D8mkStringL16java.lang.StringL16java.lang.StringL16java.lang.StringL16java.lang.StringEO"
+  %370010 = bitcast[@"T32scala.collection.IterableOnceOps"] %150021 : ?@"T16java.lang.Object"
+  %370011 = call[(@"T32scala.collection.IterableOnceOps", @"T16java.lang.String", @"T16java.lang.String", @"T16java.lang.String") => @"T16java.lang.String"] %370008 : ptr(%370010 : @"T32scala.collection.IterableOnceOps", "", "/", "")
+  jump %380000(%370011 : @"T16java.lang.String")
+%380000(%380001 : @"T16java.lang.String"):
+  ret %380001 : @"T16java.lang.String"
+}
