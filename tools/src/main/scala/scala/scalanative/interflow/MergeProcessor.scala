@@ -93,7 +93,12 @@ final class MergeProcessor(
                 s.materialize(v)
             }
             val name = mergeFresh()
-            val paramty = Sub.lub(materialized.map(_.ty), None)
+            // if(bound.map(_.toString().contains("Nil")).getOrElse(false)){
+            //   println("__phi__")
+            //   println(materialized)
+            //   println(bound)
+            // }
+            val paramty = Sub.lub(materialized.map(_.ty), bound)
             val param = Val.Local(name, paramty)
             mergePhis += MergePhi(param, names.zip(materialized))
             param
@@ -432,7 +437,7 @@ final class MergeProcessor(
       // to the source instructions, not relative to generated ones.
       val syntheticFresh = Fresh(insts.toSeq)
       val syntheticParam =
-        Val.Local(syntheticFresh(), Sub.lub(tys, None))
+        Val.Local(syntheticFresh(), Sub.lub(tys, Some(retTy)))
       val syntheticLabel =
         Inst.Label(syntheticFresh(), Seq(syntheticParam))
       val resultMergeBlock =

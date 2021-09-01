@@ -68,11 +68,6 @@ object Sub {
     tys match {
       case Seq() =>
         unreachable
-      case Seq(ty) =>
-        bound match {
-          case Some(boundTy) => bounded(ty, boundTy) 
-          case None => ty
-        }
       case head +: tail =>
         tail.foldLeft[Type](head)(lub(_, _, bound))
     }
@@ -83,21 +78,19 @@ object Sub {
   ): Type = {
     (lty, rty) match {
       case _ if lty == rty =>
-        bounded(lty, bound)
+        lty
       case (ty, Type.Nothing) =>
-        bounded(ty, bound)
+        ty
       case (Type.Nothing, ty) =>
-        bounded(ty, bound)
+        ty
       case (Type.Ptr, Type.Null) =>
         Type.Ptr
       case (Type.Null, Type.Ptr) =>
         Type.Ptr
       case (refty: Type.RefKind, Type.Null) =>
-        val ScopeRef(info) = refty
-        Type.Ref(bounded(info, bound.flatMap(ScopeRef.unapply)).name, refty.isExact, nullable = true)
+        Type.Ref(refty.className, refty.isExact, nullable = true)
       case (Type.Null, refty: Type.RefKind) =>
-        val ScopeRef(info) = refty
-        Type.Ref(bounded(info, bound.flatMap(ScopeRef.unapply)).name, refty.isExact, nullable = true)
+        Type.Ref(refty.className, refty.isExact, nullable = true)
       case (lty: Type.RefKind, rty: Type.RefKind) =>
         val ScopeRef(linfo) = lty
         val ScopeRef(rinfo) = rty
@@ -118,18 +111,21 @@ object Sub {
       implicit linked: linker.Result
   ): ScopeInfo = {
     if (linfo == rinfo) {
-      bounded(linfo, boundInfo)
+      linfo
     } else if (linfo.is(rinfo)) {
-      bounded(rinfo, boundInfo)
+      rinfo
     } else if (rinfo.is(linfo)) {
-      bounded(linfo, boundInfo)
+      linfo
     } else {
+      val correctBoundInfo = 
+        if(boundInfo.forall(bound => linfo.is(bound) && rinfo.is(bound))) boundInfo
+        else None
       val candidates =
-        linfo.linearized.filter { i => rinfo.is(i) && boundInfo.forall(i.is) }
+        linfo.linearized.filter { i => rinfo.is(i) && correctBoundInfo.forall(i.is)}
 
       candidates match {
         case Seq() =>
-          bounded(linked.infos(Rt.Object.name).asInstanceOf[ScopeInfo], boundInfo)
+          linked.infos(Rt.Object.name).asInstanceOf[ScopeInfo]
         case Seq(cand) =>
           cand
         case _ =>

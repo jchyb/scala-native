@@ -106,11 +106,11 @@ trait Opt { self: Interflow =>
 
     val retty = rets match {
       case Seq()   => Type.Nothing
-      case Seq(ty) => Sub.bounded(ty, origRetTy)
+      case Seq(ty) => ty
       case tys     => Sub.lub(tys, Some(origRetTy))
     }
 
-    // if(name.show.contains("reverse") && name.show.contains("List")){
+    // if(name.show.contains("SeqView") && name.show.contains("lzycompute")){
     //   println("__opt__")
     //   println(name)
     //   println(orig)
@@ -118,7 +118,7 @@ trait Opt { self: Interflow =>
     //   println(argtys)
     //   println(args)
     //   println(origRetTy)
-    //   println(origdefn.insts.toArray)
+    //   println(origdefn.insts.toArray.mkString("\n"))
     //   println(retty)
     // }
 
