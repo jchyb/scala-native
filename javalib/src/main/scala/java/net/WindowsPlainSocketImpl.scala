@@ -14,17 +14,29 @@ private[net] class WindowsPlainSocketImpl extends AbstractPlainSocketImpl {
 
   override def create(streaming: Boolean): Unit = {
     WinSocketApiOps.init()
-    val socket = WSASocketW(
-      addressFamily = unixSocket.AF_INET,
-      socketType = unixSocket.SOCK_STREAM,
-      protocol = 0, // choosed by provider
-      protocolInfo = null,
-      group = 0.toUInt,
-      flags = WSA_FLAG_OVERLAPPED
-    )
+
+    val (socket, isIPv6Compatible) = {
+      def makeSocket(family: Int): Ptr[Byte] =
+        WSASocketW(
+          addressFamily = family,
+          socketType = unixSocket.SOCK_STREAM,
+          protocol = 0, // choosed by provider
+          protocolInfo = null,
+          group = 0.toUInt,
+          flags = 0.toUInt
+        )
+      val sock = makeSocket(unixSocket.AF_INET6)
+      if (sock == InvalidSocket && WSAGetLastError() == WSAEAFNOSUPPORT) {
+        (makeSocket(unixSocket.AF_INET), false)
+      } else {
+        (sock, true)
+      }
+    }
+
     if (socket == InvalidSocket) {
       throw new IOException(s"Couldn't create a socket: ${WSAGetLastError()}")
     }
+    isIPv6 = isIPv6Compatible
     fd = new FileDescriptor(
       FileDescriptor.FileHandle(socket),
       readOnly = false

@@ -100,8 +100,8 @@ private[net] abstract class AbstractPlainSocketImpl extends SocketImpl {
       case _: Inet4Address => AI_V4MAPPED
       case _               => 0
     }
-    hints.ai_family = if (isIPv6) socket.AF_INET6 else socket.AF_UNSPEC
-    hints.ai_flags = AI_NUMERICHOST | AI_NUMERICSERV | mapped
+    hints.ai_family = if (isIPv6) socket.AF_INET6 else socket.AF_INET
+    hints.ai_flags = baseFlags | mapped
     hints.ai_socktype = socket.SOCK_STREAM
   }
 
