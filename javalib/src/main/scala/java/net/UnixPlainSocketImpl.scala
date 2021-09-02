@@ -4,19 +4,36 @@ import scala.scalanative.unsigned._
 import scala.scalanative.unsafe._
 import scala.scalanative.libc._
 import scala.scalanative.posix.fcntl._
+import scala.scalanative.posix.unistd._
 import scala.scalanative.posix.poll._
 import scala.scalanative.posix.pollEvents._
 import scala.scalanative.posix.pollOps._
 import scala.scalanative.posix.sys.socket
+import scala.scalanative.posix.errno._
 
 import java.io.{FileDescriptor, IOException}
+import scala.scalanative.annotation.alwaysinline
 
 private[net] class UnixPlainSocketImpl extends AbstractPlainSocketImpl {
 
   override def create(streaming: Boolean): Unit = {
-    val sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
-    if (sock < 0) throw new IOException("Couldn't create a socket")
-    fd = new FileDescriptor(sock)
+
+    @alwaysinline def failCreating(): Unit =
+      throw new IOException("Couldn't create a socket")
+
+    val (isIPv6Compatible: Boolean, sockFd: CInt) = {
+      val sockIPv6 = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, 0)
+      if (sockIPv6 < 0 && errno == EAFNOSUPPORT) {
+        val sockIPv4 = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
+        if (sockIPv4 < 0) failCreating()
+        (false, sockIPv4)
+      } else if (sockIPv6 > 0) {
+        (true, sockIPv6)
+      } else failCreating()
+    }
+
+    isIPv6 = isIPv6Compatible
+    fd = new FileDescriptor(sockFd)
   }
 
   protected def tryPollOnConnect(timeout: Int): Unit = {
