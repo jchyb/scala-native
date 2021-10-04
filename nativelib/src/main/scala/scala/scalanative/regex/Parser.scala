@@ -1620,7 +1620,7 @@ object Parser {
         assert((len % 2) == 0, s"matchRune: runs.length ${len} must be even")
 
         var found = false
-        var i     = 0
+        var i = 0
 
         while ((i < len) && (!found)) {
           if ((re.runes(i) <= r) && (r <= re.runes(i + 1))) {
