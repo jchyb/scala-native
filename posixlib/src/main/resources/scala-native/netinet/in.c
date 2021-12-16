@@ -55,6 +55,8 @@ int scalanative_ipv6_unicast_hops() { return IPV6_UNICAST_HOPS; }
 
 int scalanative_ipv6_v6only() { return IPV6_V6ONLY; }
 
+int scalanative_ipv6_tclass() { return IPV6_TCLASS; }
+
 int scalanative_ip_multicast_if() { return IP_MULTICAST_IF; }
 
 int scalanative_ip_multicast_loop() { return IP_MULTICAST_LOOP; }

@@ -86,6 +86,9 @@ object in {
   @name("scalanative_ipv6_v6only")
   def IPV6_V6ONLY: CInt = extern
 
+  @name("scalanative_ipv6_tclass")
+  def IPV6_TCLASS: CInt = extern
+
   @name("scalanative_ip_multicast_if")
   def IP_MULTICAST_IF: CInt = extern
 

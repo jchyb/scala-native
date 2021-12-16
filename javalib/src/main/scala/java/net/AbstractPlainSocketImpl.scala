@@ -35,6 +35,8 @@ private[net] abstract class AbstractPlainSocketImpl extends SocketImpl {
   protected[net] var address: InetAddress = null
   protected[net] var port = 0
 
+  protected[net] var isIPv6 = false
+
   protected var timeout = 0
   private var listening = false
 
@@ -89,12 +91,24 @@ private[net] abstract class AbstractPlainSocketImpl extends SocketImpl {
     portOpt.map(inet.ntohs(_).toInt)
   }
 
+  private def setHints(
+      hints: Ptr[addrinfo],
+      addr: InetAddress,
+      baseFlags: CInt
+  ): Unit = {
+    val mapped = addr match {
+      case _: Inet4Address => AI_V4MAPPED
+      case _               => 0
+    }
+    hints.ai_family = if (isIPv6) socket.AF_INET6 else socket.AF_INET
+    hints.ai_flags = baseFlags | mapped
+    hints.ai_socktype = socket.SOCK_STREAM
+  }
+
   override def bind(addr: InetAddress, port: Int): Unit = {
     val hints = stackalloc[addrinfo]()
     val ret = stackalloc[Ptr[addrinfo]]
-    hints.ai_family = socket.AF_UNSPEC
-    hints.ai_flags = AI_NUMERICHOST
-    hints.ai_socktype = socket.SOCK_STREAM
+    setHints(hints, addr, AI_NUMERICHOST)
 
     Zone { implicit z =>
       val cIP = toCString(addr.getHostAddress())
@@ -188,9 +202,8 @@ private[net] abstract class AbstractPlainSocketImpl extends SocketImpl {
     val inetAddr = address.asInstanceOf[InetSocketAddress]
     val hints = stackalloc[addrinfo]()
     val ret = stackalloc[Ptr[addrinfo]]
-    hints.ai_family = socket.AF_UNSPEC
-    hints.ai_flags = AI_NUMERICHOST | AI_NUMERICSERV
-    hints.ai_socktype = socket.SOCK_STREAM
+    setHints(hints, inetAddr.getAddress, AI_NUMERICHOST | AI_NUMERICSERV)
+
     val remoteAddress = inetAddr.getAddress.getHostAddress()
 
     Zone { implicit z =>
@@ -356,16 +369,24 @@ private[net] abstract class AbstractPlainSocketImpl extends SocketImpl {
   // because some of them have the same value, but require different levels
   // for example IP_TOS and TCP_NODELAY have the same value on my machine
   private def nativeValueFromOption(option: Int) = option match {
-    case SocketOptions.IP_TOS       => in.IP_TOS
-    case SocketOptions.SO_KEEPALIVE => socket.SO_KEEPALIVE
-    case SocketOptions.SO_LINGER    => socket.SO_LINGER
-    case SocketOptions.SO_TIMEOUT   => socket.SO_RCVTIMEO
-    case SocketOptions.SO_OOBINLINE => socket.SO_OOBINLINE
-    case SocketOptions.SO_RCVBUF    => socket.SO_RCVBUF
-    case SocketOptions.SO_SNDBUF    => socket.SO_SNDBUF
-    case SocketOptions.SO_REUSEADDR => socket.SO_REUSEADDR
-    case SocketOptions.TCP_NODELAY  => tcp.TCP_NODELAY
-    case _                          => sys.error(s"Unknown option: $option")
+    case SocketOptions.IP_TOS if isIPv6 => in.IPV6_TCLASS
+    case SocketOptions.IP_TOS           => in.IP_TOS
+    case SocketOptions.SO_KEEPALIVE     => socket.SO_KEEPALIVE
+    case SocketOptions.SO_LINGER        => socket.SO_LINGER
+    case SocketOptions.SO_TIMEOUT       => socket.SO_RCVTIMEO
+    case SocketOptions.SO_OOBINLINE     => socket.SO_OOBINLINE
+    case SocketOptions.SO_RCVBUF        => socket.SO_RCVBUF
+    case SocketOptions.SO_SNDBUF        => socket.SO_SNDBUF
+    case SocketOptions.SO_REUSEADDR     => socket.SO_REUSEADDR
+    case SocketOptions.TCP_NODELAY      => tcp.TCP_NODELAY
+    case _                              => sys.error(s"Unknown option: $option")
+  }
+
+  private def levelFromOption(option: Int) = option match {
+    case SocketOptions.IP_TOS if isIPv6 => in.IPPROTO_IPV6
+    case SocketOptions.IP_TOS           => in.IPPROTO_IP
+    case SocketOptions.TCP_NODELAY      => in.IPPROTO_TCP
+    case _                              => socket.SOL_SOCKET
   }
 
   override def getOption(optID: Int): Object = {
@@ -377,12 +398,7 @@ private[net] abstract class AbstractPlainSocketImpl extends SocketImpl {
       return Integer.valueOf(this.timeout)
     }
 
-    val level = optID match {
-      case SocketOptions.TCP_NODELAY => in.IPPROTO_TCP
-      case SocketOptions.IP_TOS      => in.IPPROTO_IP
-      case _                         => socket.SOL_SOCKET
-    }
-
+    val level = levelFromOption(optID)
     val optValue = nativeValueFromOption(optID)
 
     val opt = if (optID == SocketOptions.SO_LINGER) {
@@ -433,11 +449,7 @@ private[net] abstract class AbstractPlainSocketImpl extends SocketImpl {
       return
     }
 
-    val level = optID match {
-      case SocketOptions.IP_TOS      => in.IPPROTO_IP
-      case SocketOptions.TCP_NODELAY => in.IPPROTO_TCP
-      case _                         => socket.SOL_SOCKET
-    }
+    val level = levelFromOption(optID)
     val optValue = nativeValueFromOption(optID)
 
     val len = {
